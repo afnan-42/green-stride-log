@@ -229,6 +229,11 @@
   }
   
   .safe-area-bottom {
-    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 80px);
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 88px);
+  }
+  
+  /* Bottom nav spacing for content */
+  .pb-nav {
+    padding-bottom: 88px;
   }
 }
