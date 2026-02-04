@@ -1,39 +1,91 @@
 import { cn } from '@/lib/utils';
-import { Zap, Car, Utensils, Leaf, ChevronRight } from 'lucide-react';
+import { Zap, Car, Utensils, Leaf, ChevronRight, Home, ShoppingBag, Trash2 } from 'lucide-react';
 import type { Recommendation } from '@/lib/emissions';
+import { motion } from 'framer-motion';
 
 interface RecommendationCardProps {
   recommendation: Recommendation;
   onClick?: () => void;
+  compact?: boolean;
 }
 
 const categoryIcons = {
   energy: Zap,
   transport: Car,
   food: Utensils,
+  appliances: Home,
+  shopping: ShoppingBag,
+  waste: Trash2,
 };
 
 const categoryColors = {
-  energy: 'bg-eco-energy/10 text-eco-energy',
-  transport: 'bg-eco-transport/10 text-eco-transport',
-  food: 'bg-eco-food/10 text-eco-food',
+  energy: 'bg-amber-500/10 text-amber-600',
+  transport: 'bg-blue-500/10 text-blue-600',
+  food: 'bg-green-500/10 text-green-600',
+  appliances: 'bg-purple-500/10 text-purple-600',
+  shopping: 'bg-pink-500/10 text-pink-600',
+  waste: 'bg-teal-500/10 text-teal-600',
 };
 
 const impactColors = {
-  high: 'bg-eco-success/10 text-eco-success border-eco-success/20',
-  medium: 'bg-accent/10 text-accent border-accent/20',
+  high: 'bg-green-500/10 text-green-600 border-green-500/20',
+  medium: 'bg-amber-500/10 text-amber-600 border-amber-500/20',
   low: 'bg-muted text-muted-foreground border-border',
 };
 
-export function RecommendationCard({ recommendation, onClick }: RecommendationCardProps) {
+export function RecommendationCard({ recommendation, onClick, compact }: RecommendationCardProps) {
   const Icon = categoryIcons[recommendation.category];
 
+  if (compact) {
+    return (
+      <motion.button
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
+        onClick={onClick}
+        className={cn(
+          'w-full p-3 rounded-xl bg-card border border-border',
+          'transition-all duration-200 hover:shadow-md',
+          'text-left group'
+        )}
+      >
+        <div className="flex items-center gap-3">
+          <div className={cn(
+            'w-10 h-10 rounded-lg flex items-center justify-center shrink-0',
+            categoryColors[recommendation.category]
+          )}>
+            <Icon className="w-5 h-5" />
+          </div>
+          
+          <div className="flex-1 min-w-0">
+            <h3 className="font-medium text-sm line-clamp-1">
+              {recommendation.title}
+            </h3>
+            <div className="flex items-center gap-2 mt-1">
+              <span className="text-xs text-muted-foreground">
+                Save {recommendation.savingsKg.toFixed(0)} kg
+              </span>
+              {recommendation.savingsMoney && (
+                <span className="text-xs text-primary font-medium">
+                  ₹{recommendation.savingsMoney}
+                </span>
+              )}
+            </div>
+          </div>
+          
+          <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:translate-x-1 transition-transform" />
+        </div>
+      </motion.button>
+    );
+  }
+
   return (
-    <button
+    <motion.button
+      whileHover={{ scale: 1.01 }}
+      whileTap={{ scale: 0.99 }}
       onClick={onClick}
       className={cn(
         'w-full p-4 rounded-2xl bg-card border border-border',
-        'transition-all duration-300 hover:shadow-card active:scale-[0.98]',
+        'transition-all duration-300 hover:shadow-lg',
         'text-left group'
       )}
     >
@@ -74,6 +126,6 @@ export function RecommendationCard({ recommendation, onClick }: RecommendationCa
           </div>
         </div>
       </div>
-    </button>
+    </motion.button>
   );
 }
